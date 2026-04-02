@@ -312,6 +312,36 @@ _PROVIDER_MODELS = {
 }
 
 
+def resolve_model_provider(model_id: str):
+    """Resolve bare model name and provider for AIAgent.
+
+    Model IDs from the dropdown may include a provider prefix
+    (e.g. 'anthropic/claude-sonnet-4.6').  Direct-API providers expect
+    bare model names, while OpenRouter expects the full provider/model path.
+
+    Returns (model, provider) where provider may be None.
+    """
+    config_provider = None
+    model_cfg = cfg.get('model', {})
+    if isinstance(model_cfg, dict):
+        config_provider = model_cfg.get('provider')
+
+    model_id = (model_id or '').strip()
+    if not model_id:
+        return model_id, config_provider
+
+    if '/' in model_id:
+        prefix, bare = model_id.split('/', 1)
+        # If prefix matches config provider, strip it
+        if config_provider and prefix == config_provider:
+            return bare, config_provider
+        # If prefix is a known direct-API provider, use it
+        if prefix in _PROVIDER_MODELS:
+            return bare, prefix
+
+    return model_id, config_provider
+
+
 def get_available_models() -> dict:
     """
     Return available models grouped by provider.
