@@ -1,8 +1,29 @@
 # Hermes Web UI -- Changelog
 
 > Living document. Updated at the end of every sprint.
-> Source: <repo>/
-> Repository: https://github.com/<your-username>/hermes-webui
+> Repository: https://github.com/nesquena/hermes-webui
+
+---
+
+## [v0.16.1] Community Fixes -- Mobile + Auth + Provider Routing
+*April 1, 2026 | 247 tests*
+
+Community contributions from @deboste, reviewed and refined.
+
+### Bug Fixes
+- **Mobile responsive layout.** Comprehensive `@media(max-width:640px)` rules
+  for topbar, messages, composer, tool cards, approval cards, and settings modal.
+  Uses `100dvh` with `100vh` fallback to fix composer cutoff on mobile browsers.
+  Textarea `font-size:16px` prevents iOS/Android auto-zoom on focus.
+- **Reverse proxy basic auth support.** All `fetch()` and `EventSource` URLs now
+  constructed via `new URL(path, location.origin)` to strip embedded credentials
+  per Fetch spec. `credentials:'include'` on fetch, `withCredentials:true` on
+  EventSource ensure auth headers are forwarded through reverse proxies.
+- **Model provider routing.** New `resolve_model_provider()` helper in
+  `api/config.py` strips provider prefix from dropdown model IDs (e.g.
+  `anthropic/claude-sonnet-4.6` → `claude-sonnet-4.6`) and passes the correct
+  `provider` to AIAgent. Handles cross-provider selection by matching against
+  known direct-API providers.
 
 ---
 
@@ -405,4 +426,4 @@ Three-panel layout: sessions sidebar, chat area, workspace panel.
 
 ---
 
-*Last updated: Sprint 14, March 31, 2026 | Tests: 224/224*
+*Last updated: v0.16.1, April 1, 2026 | Tests: 247*
