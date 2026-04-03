@@ -189,7 +189,8 @@ def _run_agent_streaming(session_id, msg_text, model, workspace, stream_id, atta
             else: os.environ['HERMES_SESSION_KEY'] = old_session_key
 
     except Exception as e:
-        put('error', {'message': str(e), 'trace': traceback.format_exc()})
+        print('[webui] stream error:\n' + traceback.format_exc(), flush=True)
+        put('error', {'message': str(e)})
     finally:
         _clear_thread_env()  # TD1: always clear thread-local context
         with STREAMS_LOCK:

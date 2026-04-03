@@ -74,4 +74,5 @@ def handle_upload(handler):
         dest.write_bytes(file_bytes)
         return j(handler, {'filename': safe_name, 'path': str(dest), 'size': dest.stat().st_size})
     except Exception as e:
-        return j(handler, {'error': str(e), 'trace': _tb.format_exc()}, status=500)
+        print('[webui] upload error: ' + _tb.format_exc(), flush=True)
+        return j(handler, {'error': 'Upload failed'}, status=500)

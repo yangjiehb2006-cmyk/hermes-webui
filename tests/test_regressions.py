@@ -438,3 +438,37 @@ def test_newSession_clears_live_tool_cards(cleanup_test_sessions):
     next_fn = src.find("async function ", new_sess_idx + 10)
     new_sess_body = src[new_sess_idx:next_fn]
     assert "clearLiveToolCards" in new_sess_body,         "newSession() must call clearLiveToolCards() to clear stale live cards"
+
+
+# ── R16: Stack traces must not leak to clients in 500 responses ────────────
+
+def test_500_response_has_no_trace_field():
+    """R16: HTTP 500 responses must not include a 'trace' field.
+    Leaking tracebacks exposes file paths, module names, and potentially
+    secret values from local variables.
+    """
+    # POST to /api/chat/start with missing required fields to trigger an error
+    data, status = post("/api/chat/start", {})
+    # Should be an error response (4xx or 5xx)
+    assert "trace" not in data, \
+        "Server must not leak stack traces to clients"
+
+def test_upload_error_has_no_trace_field():
+    """R16b: Upload 500 responses must not include a 'trace' field."""
+    # Send a POST to /api/upload with invalid content to trigger the error handler
+    req = urllib.request.Request(
+        BASE + "/api/upload",
+        data=b"not-multipart-data",
+        headers={"Content-Type": "text/plain", "Content-Length": "18"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as r:
+            body = json.loads(r.read())
+            code = r.status
+    except urllib.error.HTTPError as e:
+        body = json.loads(e.read())
+        code = e.code
+    assert code >= 400, "Invalid upload should return an error status"
+    assert "trace" not in body, \
+        "Upload errors must not leak stack traces to clients"
+    assert "error" in body, "Error responses must include an 'error' key"

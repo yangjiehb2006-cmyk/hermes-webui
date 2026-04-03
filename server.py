@@ -40,7 +40,8 @@ class Handler(BaseHTTPRequestHandler):
             if result is False:
                 return j(self, {'error': 'not found'}, status=404)
         except Exception as e:
-            return j(self, {'error': str(e), 'trace': traceback.format_exc()}, status=500)
+            print(f'[webui] ERROR {self.command} {self.path}\n' + traceback.format_exc(), flush=True)
+            return j(self, {'error': 'Internal server error'}, status=500)
 
     def do_POST(self):
         self._req_t0 = time.time()
@@ -51,7 +52,8 @@ class Handler(BaseHTTPRequestHandler):
             if result is False:
                 return j(self, {'error': 'not found'}, status=404)
         except Exception as e:
-            return j(self, {'error': str(e), 'trace': traceback.format_exc()}, status=500)
+            print(f'[webui] ERROR {self.command} {self.path}\n' + traceback.format_exc(), flush=True)
+            return j(self, {'error': 'Internal server error'}, status=500)
 
 
 def main():
