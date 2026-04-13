@@ -88,7 +88,8 @@ function _renderOnboardingBody(){
   if(key==='system'){
     const hermesOk=system.hermes_found&&system.imports_ok;
     const setupOk=!!system.chat_ready;
-    _setOnboardingNotice(system.provider_note|| (setupOk?t('onboarding_notice_system_ready'):t('onboarding_notice_system_unavailable')),setupOk?'success':(hermesOk?'info':'warn'));
+    const stateNotice = !hermesOk ? t('onboarding_notice_system_unavailable') : (setupOk ? t('onboarding_notice_system_ready') : system.provider_note);
+    _setOnboardingNotice(stateNotice, setupOk?'success':(hermesOk?'info':'warn'));
     body.innerHTML=`
       <div class="onboarding-panel-grid">
         <div class="onboarding-check ${hermesOk?'ok':'warn'}"><strong>${t('onboarding_check_agent')}</strong><span>${hermesOk?t('onboarding_check_agent_ready'):t('onboarding_check_agent_missing')}</span></div>
