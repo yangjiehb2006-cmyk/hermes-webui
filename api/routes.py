@@ -171,27 +171,27 @@ _LOGIN_PAGE_HTML = """<!doctype html>
 <title>{{BOT_NAME}} — {{LOGIN_TITLE}}</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#1a1a2e;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+body{background:#f0f2f5;color:#1c1e21;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   height:100vh;display:flex;align-items:center;justify-content:center}
-.card{background:#16213e;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:36px 32px;
-  width:320px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.3)}
-.logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(145deg,#e8a030,#e94560);
+.card{background:#ffffff;border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:36px 32px;
+  width:320px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.logo{width:48px;height:48px;border-radius:12px;background:none;
   display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#fff;
-  margin:0 auto 12px;box-shadow:0 2px 12px rgba(233,69,96,.3)}
+  margin:0 auto 12px;}
 h1{font-size:18px;font-weight:600;margin-bottom:4px}
-.sub{font-size:12px;color:#8888aa;margin-bottom:24px}
-input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.1);
-  background:rgba(255,255,255,.04);color:#e8e8f0;font-size:14px;outline:none;margin-bottom:14px;
-  transition:border-color .15s}
-input:focus{border-color:rgba(124,185,255,.5);box-shadow:0 0 0 3px rgba(124,185,255,.1)}
-button{width:100%;padding:10px;border-radius:10px;border:none;background:rgba(124,185,255,.15);
-  border:1px solid rgba(124,185,255,.3);color:#7cb9ff;font-size:14px;font-weight:600;cursor:pointer;
+.sub{font-size:12px;color:#65676b;margin-bottom:24px}
+input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(0,0,0,.15);
+  background:#fff;color:#1c1e21;font-size:14px;outline:none;margin-bottom:14px;
+  transition:border-color .15s;box-shadow:inset 0 1px 2px rgba(0,0,0,.03)}
+input:focus{border-color:#1877f2;box-shadow:0 0 0 3px rgba(24,119,242,.2)}
+button{width:100%;padding:10px;border-radius:10px;border:none;background:#1877f2;
+  color:#fff;font-size:14px;font-weight:600;cursor:pointer;
   transition:all .15s}
-button:hover{background:rgba(124,185,255,.25)}
-.err{color:#e94560;font-size:12px;margin-top:10px;display:none}
+button:hover{background:#166fe5}
+.err{color:#e0245e;font-size:12px;margin-top:10px;display:none}
 </style></head><body>
 <div class="card">
-  <div class="logo">{{BOT_NAME_INITIAL}}</div>
+  <div class="logo"><img src="/static/logo.png" style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;" alt="logo" /></div>
   <h1>{{BOT_NAME}}</h1>
   <p class="sub">{{LOGIN_SUBTITLE}}</p>
   <form id="login-form" data-invalid-pw="{{LOGIN_INVALID_PW}}" data-conn-failed="{{LOGIN_CONN_FAILED}}">
@@ -218,7 +218,7 @@ def handle_get(handler, parsed) -> bool:
 
     if parsed.path == "/login":
         _settings = load_settings()
-        _bn = _html.escape(_settings.get("bot_name") or "Hermes")
+        _bn = _html.escape(_settings.get("bot_name") or "中通建工会Agent")
         _lang = _settings.get("language", "en")
         _login_strings = _LOGIN_LOCALE.get(_lang, _LOGIN_LOCALE["en"])
         _page = (
